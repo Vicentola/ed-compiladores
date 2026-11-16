@@ -10,4 +10,10 @@ class TokenType(Enum):
     DELIMITER = auto()
     EOF = auto()
     
+from dataclasses import dataclass
 
+@dataclass
+class Token:
+    tipo: TokenType
+    lexema: str
+    linha: int
