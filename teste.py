@@ -6,7 +6,7 @@ from erros import ErroLexico
 def testar_delimitadores():
     print("=== TESTE DELIMITADORES E EOF ===")
 
-    scanner = Scanner("()")
+    scanner = Scanner("()+-\n*%/")
 
     try:
         tokens = scanner.scan()

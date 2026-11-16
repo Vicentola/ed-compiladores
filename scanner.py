@@ -36,7 +36,7 @@ class Scanner:
                 self.avancar()
                 tokens.append(Token(TokenType.DELIMITER, lexema, self.linha))
 
-            elif self.atual in ('+','-','*','/','%',"<",'>'):
+            elif self.atual in ('+','-','*','/','%'):
                 lexema = self.atual
                 self.avancar()
                 tokens.append(Token(TokenType.OPERATOR, lexema, self.linha))          
