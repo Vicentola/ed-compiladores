@@ -1,5 +1,5 @@
 from tokens import Token, TokenType
-
+from erros import ErroLexico
 
 class Scanner:
     def __init__(self, text) -> None:
@@ -36,27 +36,24 @@ class Scanner:
                 self.avancar()
                 tokens.append(Token(TokenType.DELIMITER, lexema, self.linha))
 
-            elif self.atual in ('<=','>=','==','!=','+','-','*','/','%',"<",'>'):
+            elif self.atual in ('+','-','*','/','%',"<",'>'):
                 lexema = self.atual
                 self.avancar()
                 tokens.append(Token(TokenType.OPERATOR, lexema, self.linha))          
 
-            return tokens      
-            
-            
-            
         
+
+
+
+            else:
+                raise ErroLexico(self.atual, self.linha)   
             
-        return None
-
-    def scanAll(self):
-        tokens = []
-
-        while True:
-            token = self.scan()
-            if token is None:
-                break
-            tokens.append(tokens)
-
+            
+            
+        lexema = ""
+        tokens.append(Token(TokenType.EOF, lexema,self.linha))
+            
         return tokens
+
+    
 

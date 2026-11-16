@@ -1,22 +1,58 @@
+
 from scanner import Scanner
+from erros import ErroLexico
 
-scanner = Scanner("a\n\nb")
 
-print("Após criar o Scanner:")
-print("Atual:", repr(scanner.atual))
-print("Próximo:", repr(scanner.proximo))
-print("Linha:", scanner.linha)
+def testar_delimitadores():
+    print("=== TESTE DELIMITADORES E EOF ===")
 
-scanner.avancar()
+    scanner = Scanner("()")
 
-print("\nApós primeiro avancar():")
-print("Atual:", repr(scanner.atual))
-print("Próximo:", repr(scanner.proximo))
-print("Linha:", scanner.linha)
+    try:
+        tokens = scanner.scan()
 
-scanner.avancar()
+        for token in tokens:
+            print(
+                f"Tipo: {token.tipo.name} | "
+                f"Lexema: {repr(token.lexema)} | "
+                f"Linha: {token.linha}"
+            )
 
-print("\nApós segundo avancar():")
-print("Atual:", repr(scanner.atual))
-print("Próximo:", repr(scanner.proximo))
-print("Linha:", scanner.linha)
+    except ErroLexico as erro:
+        print(erro)
+
+
+def testar_caractere_invalido():
+    print("\n=== TESTE CARACTERE INVÁLIDO ===")
+
+    scanner = Scanner("( @ )")
+
+    try:
+        tokens = scanner.scan()
+
+        for token in tokens:
+            print(token)
+
+    except ErroLexico as erro:
+        print(erro)
+
+
+def testar_linha_erro():
+    print("\n=== TESTE LINHA DO ERRO ===")
+
+    scanner = Scanner("(\n@)")
+
+    try:
+        tokens = scanner.scan()
+
+        for token in tokens:
+            print(token)
+
+    except ErroLexico as erro:
+        print(erro)
+
+
+if __name__ == '__main__':
+    testar_delimitadores()
+    testar_caractere_invalido()
+    testar_linha_erro()
