@@ -1,22 +1,29 @@
+
 from scanner import Scanner
+from erros import ErroLexico
+from tokens import TokenType
 
-scanner = Scanner("a\n\nb")
 
-print("Após criar o Scanner:")
-print("Atual:", repr(scanner.atual))
-print("Próximo:", repr(scanner.proximo))
-print("Linha:", scanner.linha)
 
-scanner.avancar()
 
-print("\nApós primeiro avancar():")
-print("Atual:", repr(scanner.atual))
-print("Próximo:", repr(scanner.proximo))
-print("Linha:", scanner.linha)
+testes = [
+    "=",
+    "(= 1 2)",
+    "<!",
+    "=!",
+    "(<= 1 2)",
+    "print\n(set a 10)"
+]
 
-scanner.avancar()
+for texto in testes:
+    print(f"\nEntrada: {repr(texto)}")
 
-print("\nApós segundo avancar():")
-print("Atual:", repr(scanner.atual))
-print("Próximo:", repr(scanner.proximo))
-print("Linha:", scanner.linha)
+    try:
+        scanner = Scanner(texto)
+        tokens = scanner.scan()
+
+        for token in tokens:
+            print(token)
+
+    except ErroLexico as erro:
+        print(erro)
