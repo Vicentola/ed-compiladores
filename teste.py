@@ -2,8 +2,7 @@
 from scanner import Scanner
 from erros import ErroLexico
 from tokens import TokenType
-
-
+from erros import ErroSintatico
 
 
 testes = [
@@ -27,3 +26,16 @@ for texto in testes:
 
     except ErroLexico as erro:
         print(erro)
+
+
+
+
+try:
+    raise ErroSintatico("Fim de arquivo inesperado. Esperava-se ')'.", 2)
+except ErroSintatico as erro:
+    print(erro)
+
+try:
+    raise ErroSintatico("Estrutura 'if' malformada. Omitido argumento de 'else'.")
+except ErroSintatico as erro:
+    print(erro)
