@@ -72,6 +72,24 @@ class Scanner:
                 self.avancar()
                 tokens.append(Token(TokenType.OPERATOR, lexema, self.linha))
 
+
+            elif self.atual in ('<', '>', '=', '!'):
+                linha_inicio = self.linha
+                lexema = self.atual
+
+                if self.proximo == '=':
+                    lexema += self.proximo
+                    self.avancar()
+
+                self.avancar()
+
+                if lexema in ('!', '='):
+                    raise ErroLexico(lexema, linha_inicio)
+
+                tokens.append(Token(TokenType.OPERATOR, lexema, linha_inicio))
+
+
+
             elif self.atual is not None and self.atual in '0123456789':
 
                 linha_inicio = self.linha

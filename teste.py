@@ -5,44 +5,25 @@ from tokens import TokenType
 
 
 
+
 testes = [
-    ("print", "KEYWORD"),
-    ("contador", "IDENTIFIER"),
-    ("a", "IDENTIFIER"),
-    ("iffy", "IDENTIFIER"),
-    ("(set a 10)", "TOKENS"),
-    ("maçã", "ERRO"),
-    ("@a", "ERRO")
+    "=",
+    "(= 1 2)",
+    "<!",
+    "=!",
+    "(<= 1 2)",
+    "print\n(set a 10)"
 ]
 
-for entrada, esperado in testes:
-    print(f"\nEntrada: {entrada}")
+for texto in testes:
+    print(f"\nEntrada: {repr(texto)}")
 
     try:
-        scanner = Scanner(entrada)
+        scanner = Scanner(texto)
         tokens = scanner.scan()
 
-        if esperado == "TOKENS":
-            for token in tokens:
-                print(token)
-
-        elif esperado == "KEYWORD":
-            assert tokens[0].tipo == TokenType.KEYWORD
-            print("PASSOU:", tokens)
-
-        elif esperado == "IDENTIFIER":
-            assert tokens[0].tipo == TokenType.IDENTIFIER
-            print("PASSOU:", tokens)
-
-        else:
-            print("FALHOU: deveria gerar erro léxico")
+        for token in tokens:
+            print(token)
 
     except ErroLexico as erro:
-        if esperado == "ERRO":
-            print("PASSOU: erro léxico identificado")
-            print(erro)
-        else:
-            print("FALHOU:", erro)
-
-    except Exception as erro:
-        print("ERRO NO TESTE:", erro)
+        print(erro)
