@@ -20,8 +20,14 @@ class Scanner:
             self.proximo = next(self.iterador)
         except StopIteration:
             self.proximo = None
-            
-            
+
+
+    def ler_digitos(self):
+        numeros = ''
+        while self.atual is not None and self.atual in '0123456789':
+            numeros += self.atual
+            self.avancar()
+        return(numeros)
            
 
     def scan(self):
@@ -39,7 +45,33 @@ class Scanner:
             elif self.atual in ('+','-','*','/','%'):
                 lexema = self.atual
                 self.avancar()
-                tokens.append(Token(TokenType.OPERATOR, lexema, self.linha))          
+                tokens.append(Token(TokenType.OPERATOR, lexema, self.linha))
+
+            elif self.atual is not None and self.atual in '0123456789':
+
+                linha_inicio = self.linha
+                parte_inteira = self.ler_digitos()
+                if self.atual == '.':
+                    if self.proximo is not None and self.proximo in '0123456789':
+                        self.avancar()
+                    else:
+                        raise ErroLexico(self.atual, self.linha)
+
+                    parte_decimal = self.ler_digitos()
+
+                    lexema = parte_inteira + '.' + parte_decimal
+
+                    tokens.append(Token(TokenType.FLOAT,lexema,linha_inicio))
+
+                else:
+                    tokens.append(Token(TokenType.INT,parte_inteira,linha_inicio))
+
+
+
+
+
+
+                    
 
         
 
