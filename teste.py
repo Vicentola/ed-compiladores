@@ -1,58 +1,48 @@
 
 from scanner import Scanner
 from erros import ErroLexico
+from tokens import TokenType
 
 
-def testar_delimitadores():
-    print("=== TESTE DELIMITADORES E EOF ===")
 
-    scanner = Scanner("3.")
+testes = [
+    ("print", "KEYWORD"),
+    ("contador", "IDENTIFIER"),
+    ("a", "IDENTIFIER"),
+    ("iffy", "IDENTIFIER"),
+    ("(set a 10)", "TOKENS"),
+    ("maçã", "ERRO"),
+    ("@a", "ERRO")
+]
 
-    try:
-        tokens = scanner.scan()
-
-        for token in tokens:
-            print(
-                f"Tipo: {token.tipo.name} | "
-                f"Lexema: {repr(token.lexema)} | "
-                f"Linha: {token.linha}"
-            )
-
-    except ErroLexico as erro:
-        print(erro)
-
-
-def testar_caractere_invalido():
-    print("\n=== TESTE CARACTERE INVÁLIDO ===")
-
-    scanner = Scanner("( @ )")
+for entrada, esperado in testes:
+    print(f"\nEntrada: {entrada}")
 
     try:
+        scanner = Scanner(entrada)
         tokens = scanner.scan()
 
-        for token in tokens:
-            print(token)
+        if esperado == "TOKENS":
+            for token in tokens:
+                print(token)
+
+        elif esperado == "KEYWORD":
+            assert tokens[0].tipo == TokenType.KEYWORD
+            print("PASSOU:", tokens)
+
+        elif esperado == "IDENTIFIER":
+            assert tokens[0].tipo == TokenType.IDENTIFIER
+            print("PASSOU:", tokens)
+
+        else:
+            print("FALHOU: deveria gerar erro léxico")
 
     except ErroLexico as erro:
-        print(erro)
+        if esperado == "ERRO":
+            print("PASSOU: erro léxico identificado")
+            print(erro)
+        else:
+            print("FALHOU:", erro)
 
-
-def testar_linha_erro():
-    print("\n=== TESTE LINHA DO ERRO ===")
-
-    scanner = Scanner("(\n@)")
-
-    try:
-        tokens = scanner.scan()
-
-        for token in tokens:
-            print(token)
-
-    except ErroLexico as erro:
-        print(erro)
-
-
-if __name__ == '__main__':
-    testar_delimitadores()
-    testar_caractere_invalido()
-    testar_linha_erro()
+    except Exception as erro:
+        print("ERRO NO TESTE:", erro)
