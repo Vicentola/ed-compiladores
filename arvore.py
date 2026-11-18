@@ -33,5 +33,23 @@ class Atribuicao:
     expressao: object
     linha: int
 
+@dataclass
+class Se:
+    condicao: object
+    verdadeiro: object
+    falso: object
+    linha: int
+
+@dataclass
+class Enquanto:
+    condicao: object
+    comando: object
+    linha: int
+
+@dataclass
+class Bloco:
+    comandos: list
+    linha: int
+
 
 

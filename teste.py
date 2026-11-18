@@ -4,7 +4,7 @@ from erros import ErroLexico
 from tokens import TokenType
 from erros import ErroSintatico
 from parser import Parser
-from arvore import Atribuicao, Imprimir
+from arvore import Atribuicao, Imprimir, Se, Enquanto, Bloco
 
 
 testes = [
@@ -165,3 +165,9 @@ print(parser.comando())
 
 parser = Parser(Scanner("(set a 10)").scan())
 print(parser.comando())
+
+
+
+print(Se(Numero("1", 1), Imprimir(Numero("1", 1), 1), Imprimir(Numero("0", 1), 1), 1))
+print(Enquanto(Numero("1", 1), Imprimir(Numero("1", 1), 1), 1))
+print(Bloco([Imprimir(Numero("1", 1), 1)], 1))
