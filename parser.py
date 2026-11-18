@@ -2,7 +2,7 @@
 #ista de tokens que o scan já entrega e um dedo apontando para um deles
 from tokens import Token, TokenType
 from erros import ErroSintatico
-from arvore import Numero, Variavel, Operacao, Imprimir, Atribuicao
+from arvore import Numero, Variavel, Operacao, Imprimir, Atribuicao, Enquanto, Bloco, Se
 
 class Parser:
 
@@ -90,6 +90,53 @@ class Parser:
             expressao = self.expressao()
             self.esperar(TokenType.DELIMITER, ')')
             return Atribuicao(nome.lexema,expressao, nome.linha)
+
+        elif token_atual.tipo == TokenType.KEYWORD and token_atual.lexema == 'while':
+            palavra = self.esperar(TokenType.KEYWORD)
+            condicao = self.expressao()
+            corpo = self.comando()
+            self.esperar(TokenType.DELIMITER, ')')
+            return Enquanto(condicao , corpo, palavra.linha)
+
+        elif token_atual.tipo == TokenType.KEYWORD and token_atual.lexema == 'if':
+            palavra = self.esperar(TokenType.KEYWORD)
+            condicao = self.expressao()
+            verdadeiro = self.comando()
+            
+            token_proximo =  self.olhar()
+            if token_proximo.tipo == TokenType.DELIMITER and token_proximo.lexema == ')':
+                raise ErroSintatico(descricao = "Estrutura 'if' malformada. Omitido argumento de 'else'.")
+            else:
+                falso = self.comando()
+            
+            self.esperar(TokenType.DELIMITER, ')')
+
+            return Se(condicao, verdadeiro, falso, palavra.linha)
+
+        elif token_atual.tipo == TokenType.KEYWORD and token_atual.lexema == 'begin':
+            palavra = self.esperar(TokenType.KEYWORD)
+            token_atual = self.olhar()   # Sem a foto 1, na primeira pergunta o token_atual ainda é o begin, o laço entra, e o comando() encontra o ) do (begin) onde esperava um (.
+            comandos = []
+            while(token_atual.tipo != TokenType.EOF and not (token_atual.tipo == TokenType.DELIMITER and token_atual.lexema == ')')):
+                esperando = self.comando()
+                comandos.append(esperando)
+                token_atual = self.olhar()
+            self.esperar(TokenType.DELIMITER, ')')
+
+            return Bloco(comandos, palavra.linha)
+        
+        descricao = f"Esperava-se um comando (print, set, if, while ou begin), mas veio '{token_atual.lexema}'."
+
+
+        raise ErroSintatico(descricao, token_atual.linha)
+
+    def programa(self):
+        comandos = []
+        while (self.olhar().tipo != TokenType.EOF):     
+            comandos.append(self.comando())
+        return comandos
+
+            
 
          
     

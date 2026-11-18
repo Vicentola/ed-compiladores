@@ -171,3 +171,67 @@ print(parser.comando())
 print(Se(Numero("1", 1), Imprimir(Numero("1", 1), 1), Imprimir(Numero("0", 1), 1), 1))
 print(Enquanto(Numero("1", 1), Imprimir(Numero("1", 1), 1), 1))
 print(Bloco([Imprimir(Numero("1", 1), 1)], 1))
+
+
+parser = Parser(Scanner("(while (> a 0) (print a))").scan())
+print(parser.comando())
+
+
+parser = Parser(Scanner("(if (>= a 18) (print 1) (print 0))").scan())
+print(parser.comando())
+
+
+try:
+    parser = Parser(Scanner("(if (>= a 18) (print 1))").scan())
+    print(parser.comando())
+except ErroSintatico as erro:
+    print(erro)
+
+
+codigo = "(begin (print 1) (print 2))"
+
+try:
+    tokens = Scanner(codigo).scan()
+    parser = Parser(tokens)
+    resultado = parser.comando()
+    print(resultado)
+
+except ErroSintatico as erro:
+    print(erro)
+
+
+codigo = "(begin (print 1) (print 2))"
+
+try:
+    tokens = Scanner(codigo).scan()
+    parser = Parser(tokens)
+    resultado = parser.comando()
+    print(resultado)
+
+except ErroSintatico as erro:
+    print(erro)
+
+codigo = "(begin)"
+
+try:
+    tokens = Scanner(codigo).scan()
+    parser = Parser(tokens)
+    resultado = parser.comando()
+    print(resultado)
+
+except ErroSintatico as erro:
+    print(erro)
+
+
+codigo = "(begin (print 1))"
+
+try:
+    tokens = Scanner(codigo).scan()
+    parser = Parser(tokens)
+    resultado = parser.comando()
+    print(resultado)
+
+except ErroSintatico as erro:
+    print(erro)
+
+
