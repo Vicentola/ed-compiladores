@@ -1,31 +1,31 @@
-from scanner import Scanner
-from parser import Parser
-from erros import ErroLexico, ErroSintatico
+import os
 
+EXEMPLOS = {
+    "positivo1.txt": "(print 10)\n",
 
-def rodar(texto):
-    return Parser(Scanner(texto).scan()).programa()
-
-
-POSITIVOS = [
-    ("1) print basico", "(print 10)"),
-    ("2) operacoes", """(begin
+    "positivo2.txt": """(begin
   (print (+ 10 (* 3 5)))
   (print (- 100 (/ 20 2)))
-)"""),
-    ("3) variaveis", """(begin
+)
+""",
+
+    "positivo3.txt": """(begin
   (set a 10)
   (set b 20)
   (print (+ a b))
-)"""),
-    ("4) condicional", """(begin
+)
+""",
+
+    "positivo4.txt": """(begin
   (set idade 20)
   (if (>= idade 18)
        (print 1)
        (print 0)
   )
-)"""),
-    ("5) repeticao", """(begin
+)
+""",
+
+    "positivo5.txt": """(begin
   (set contador 1)
   (while (<= contador 10)
     (begin
@@ -33,40 +33,27 @@ POSITIVOS = [
        (set contador (+ contador 1))
     )
   )
-)"""),
-    ("(erro semantico e do amigo; aqui so parseia)", "(print a)"),
-]
+)
+""",
 
-NEGATIVOS = [
-    ("1) erro lexico", """(begin
+    "negativo1_lexico.txt": """(begin
   (set valor 100)
-  (print (valor @ 2)))""",
-     "Erro Léxico: Caractere inválido '@' na linha 3."),
-    ("2) parentese nao fechado", """(begin
+  (print (valor @ 2)))
+""",
+
+    "negativo2_parentese.txt": """(begin
   (print (+ 1 2)
-)""",
-     "Erro Sintático na linha 2: Fim de arquivo inesperado. Esperava-se ')'."),
-    ("3) if sem else", "(if (> x 10) (print 1))",
-     "Erro Sintático: Estrutura 'if' malformada. Omitido argumento de 'else'."),
-]
+)
+""",
 
-print("=== POSITIVOS (devem parsear sem erro) ===")
-for nome, texto in POSITIVOS:
-    try:
-        cmds = rodar(texto)
-        print("OK   ", nome, "->", [type(c).__name__ for c in cmds])
-    except (ErroLexico, ErroSintatico) as erro:
-        print("FALHA", nome, "->", erro)
+    "negativo3_if.txt": "(if (> x 10) (print 1))\n",
 
-print("\n=== NEGATIVOS (mensagem exata do PDF) ===")
-for nome, texto, esperado in NEGATIVOS:
-    try:
-        rodar(texto)
-        print("FALHA", nome, "-> nao deu erro")
-    except (ErroLexico, ErroSintatico) as erro:
-        if str(erro) == esperado:
-            print("OK   ", nome)
-        else:
-            print("FALHA", nome)
-            print("   veio:    ", erro)
-            print("   esperado:", esperado)
+    "negativo4_semantico.txt": "(print a)\n",
+}
+
+os.makedirs("exemplos", exist_ok=True)
+
+for nome, conteudo in EXEMPLOS.items():
+    with open(os.path.join("exemplos", nome), "w", encoding="utf-8") as f:
+        f.write(conteudo)
+    print("criado:", nome)
