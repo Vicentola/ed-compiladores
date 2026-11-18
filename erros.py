@@ -4,7 +4,7 @@ class ErroLexico(Exception):
         self.linha = linha
 
         super().__init__(
-            f"Erro léxico '{caractere}' na linha {linha}"
+            f"Erro Léxico: Caractere inválido '{caractere}' na linha {linha}."
         )
 
 class ErroSintatico(Exception):
